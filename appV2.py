@@ -1107,8 +1107,13 @@ div[data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) {
     font-weight: 600 !important;
 }
 div[data-testid="stRadio"] [role="radiogroup"] label input[type="radio"],
-div[data-testid="stRadio"] [role="radiogroup"] label > div:first-of-type {
+div[data-testid="stRadio"] [role="radiogroup"] label > div:first-of-type:not(:has([data-testid="stMarkdownContainer"])) {
     display: none !important;
+}
+div[data-testid="stRadio"] [role="radiogroup"] label [data-testid="stMarkdownContainer"] p {
+    color: inherit !important;
+    margin: 0 !important;
+}
 }
 
 /* ── Selectbox ── */
