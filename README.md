@@ -18,7 +18,7 @@ preview the result with the built-in piano player and download it as a MIDI file
 ## How to use
 
 1. **Mood of the song:** choose the emotional color of the piece.
-2. **Root note & Tempo:** choose a major key (`C`, `G`, `Bb`, ...) or a minor key (`Am`, `F#m`, ...), then a tempo from *Slow* to *Very Fast*.
+2. **Key & Tempo:** choose a major key (shown as `C major`, `G major`, ...) or a minor key (`A minor`, `F# minor`, ...), then a tempo from *Slow* to *Very Fast*.
 3. **Structure & Creativity:** choose a song structure and how adventurous the chords should be.
    With *Custom*, pick any combination of sections yourself.
 4. Click **Generate Chord Progression**.
@@ -52,12 +52,12 @@ Each section has a fixed length: Verse and Chorus have 8 chords, and Intro, Pre-
 
 ### Example 1: a bright song in a major key
 
-**Settings:** Mood `Happy` · Root Note `G` · Tempo `Medium` · Structure `Minimalist` · Creativity `Balanced`
+**Settings:** Mood `Happy` · Key `G major` · Tempo `Medium` · Structure `Minimalist` · Creativity `Balanced`
 
 ```
 Generated Results
 2 sections · 16 chords
-Mood: Happy | Root Note: G | Tempo: Medium | Structure: Minimalist | Creativity: Balanced
+Mood: Happy | Key: G major | Tempo: Medium | Structure: Minimalist | Creativity: Balanced
 
 ┃ VERSE
 ┃ G › Em › C › D › G › Bm › C › D
@@ -73,12 +73,12 @@ Mood: Happy | Root Note: G | Tempo: Medium | Structure: Minimalist | Creativity:
 
 ### Example 2: a somber song in a minor key
 
-**Settings:** Mood `Sad` · Root Note `Am` · Tempo `Medium Slow` · Structure `Minimalist` · Creativity `Balanced`
+**Settings:** Mood `Sad` · Key `A minor` · Tempo `Medium Slow` · Structure `Minimalist` · Creativity `Balanced`
 
 ```
 Generated Results
 2 sections · 16 chords
-Mood: Sad | Root Note: Am | Tempo: Medium Slow | Structure: Minimalist | Creativity: Balanced
+Mood: Sad | Key: A minor | Tempo: Medium Slow | Structure: Minimalist | Creativity: Balanced
 
 ┃ VERSE
 ┃ Am › F › C › G › Am › Dm › G › Am
@@ -113,7 +113,7 @@ which stays the same no matter which key you pick. The downloaded file is named
 ```
 .
 ├── appV2.py                        # Streamlit app (entry point)
-├── chord_vocab.pkl         # Vocabulary and token mappings
+├── chord_vocab.pkl                 # Vocabulary and token mappings
 ├── chord_transformer_decoder_V3.pt # Trained model checkpoint
 ├── requirements.txt                # Python dependencies
 ├── .streamlit/
