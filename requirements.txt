@@ -2,6 +2,6 @@
 # which is too large for Streamlit Community Cloud).
 --extra-index-url https://download.pytorch.org/whl/cpu
 
-streamlit>=1.30
+streamlit=1.45.1
 torch>=2.0
 mido>=1.3
