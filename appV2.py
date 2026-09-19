@@ -961,7 +961,7 @@ SECTION_ACCENT = {
 }
 CREATIVITY_PRESETS = {
     1: {"label": "Conventional",  "desc": "Common & predictable chords",         "temperature": 0.8,  "top_k": 5,  "top_p": 0.85, "repetition_penalty": 1.5},
-    2: {"label": "Balanced",      "desc": "Natural variation",      "temperature": 1.1,  "top_k": 10, "top_p": 0.90, "repetition_penalty": 2.0},
+    2: {"label": "Balanced",      "desc": "natural variation",      "temperature": 1.1,  "top_k": 10, "top_p": 0.90, "repetition_penalty": 2.0},
     3: {"label": "Experimental", "desc": "Unexpected and more creative chords", "temperature": 1.4,  "top_k": 20, "top_p": 0.95, "repetition_penalty": 1.5},
 }
 SONG_STRUCTURES = {
@@ -974,26 +974,6 @@ SECTION_LENGTH = {
     "Intro": 4, "Verse": 8, "Pre-Chorus": 4,
     "Chorus": 8, "Bridge": 4, "Outro": 4,
 }
-KEY_OPTIONS = ["C", "G", "D", "A", "E", "B", "F#", "C#", "F", "Bb", "Eb", "Ab", "Db", "Gb",
-               "Am", "Em", "Dm", "Bm", "Gm", "Cm", "Fm", "C#m", "F#m", "G#m"]
-
-def format_key(key):
-    """Display 'C' as 'C major' and 'Am' as 'A minor'. The internal value is unchanged."""
-    return f"{get_root_note(key)} minor" if is_minor_key(key) else f"{key} major"
-
-def render_structure_preview(sections):
-    """Small chip summary of the selected song structure."""
-    if not sections:
-        return '<div class="structure-preview"><span class="structure-empty">No sections selected</span></div>'
-    chips = '<span class="struct-sep">›</span>'.join(
-        f'<span class="struct-chip" style="color:{SECTION_ACCENT.get(s, "#6B7280")};'
-        f'border-color:{SECTION_ACCENT.get(s, "#6B7280")}">{s}</span>'
-        for s in sections
-    )
-    total_chords = sum(SECTION_LENGTH.get(s, 8) for s in sections)
-    n = len(sections)
-    return (f'<div class="structure-preview">{chips}</div>'
-            f'<div class="structure-meta">{n} section{"s" if n != 1 else ""} · {total_chords} chords</div>')
 
 # ── Page Config ──────────────────────────────
 st.set_page_config(
@@ -1132,11 +1112,13 @@ div[data-testid="stRadio"] [role="radiogroup"] label {
     justify-content: center !important;
     gap: 0 !important;
 }
+
 /* hide the radio circle and the real input, whatever tag they use */
 div[data-testid="stRadio"] [role="radiogroup"] label input[type="radio"],
 div[data-testid="stRadio"] [role="radiogroup"] label > *:not(:has([data-testid="stMarkdownContainer"])) {
     display: none !important;
 }
+
 /* remove the leftover spacing around the text */
 div[data-testid="stRadio"] [role="radiogroup"] label > *:has([data-testid="stMarkdownContainer"]),
 div[data-testid="stRadio"] [role="radiogroup"] label [data-testid="stMarkdownContainer"] {
@@ -1189,17 +1171,6 @@ div[data-baseweb="popover"] li[aria-selected="true"] {
 /* ── Select Slider ── */
 div[data-testid="stSlider"] label,
 div[data-testid="stSelectSlider"] label { display: none !important; }
-/* use the app font instead of the default monospace */
-div[data-testid="stSelectSlider"] * { font-family: 'Outfit', sans-serif !important; }
-/* darker, more readable end labels (Slow / Very Fast, Conventional / Experimental) */
-div[data-testid="stSelectSlider"] [data-testid*="TickBar"],
-div[data-testid="stSelectSlider"] [data-testid*="TickBar"] * {
-    color: var(--text-2) !important;
-    font-size: 0.8rem !important;
-}
-div[data-testid="stSelectSlider"] [data-testid*="ThumbValue"] {
-    font-weight: 500 !important;
-}
 
 /* ── Multiselect ── */
 div[data-testid="stMultiSelect"] label {
@@ -1386,47 +1357,22 @@ div[data-testid="stAlert"] {
     line-height: 1.7;
 }
 
-/* ── Structure preview ── */
-.structure-preview {
+/* ── Creativity Labels Row ── */
+.creativity-labels {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px 2px;
-    margin-top: 0.15rem;
+    justify-content: space-between;
+    margin-top: -0.4rem;
+    margin-bottom: 0.25rem;
+    padding: 0 2px;
 }
-.struct-chip {
-    font-family: 'Outfit', sans-serif;
+.creativity-lbl {
     font-size: 0.72rem;
-    font-weight: 500;
-    padding: 1px 9px;
-    border: 1px solid;
-    border-radius: 100px;
-    background: var(--surface);
-    white-space: nowrap;
-}
-.struct-sep {
     color: var(--text-3);
-    font-size: 0.8rem;
-    padding: 0 3px;
-}
-.structure-meta {
     font-family: 'Outfit', sans-serif;
-    font-size: 0.72rem;
-    color: var(--text-2);
-    margin-top: 6px;
 }
-.structure-empty {
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.8rem;
-    color: var(--text-2);
-}
-
-/* ── Creativity description ── */
-.creativity-desc {
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.8rem;
-    color: var(--text-2);
-    margin-top: 0.15rem;
+.creativity-lbl.active {
+    color: var(--accent);
+    font-weight: 600;
 }
 </style>""", unsafe_allow_html=True)
 
@@ -1459,15 +1405,15 @@ mood_input = st.radio(
 # ── STEP 2 — Nada Dasar & Tempo ─────────
 st.markdown("""<div class="step-label">
     <span class="step-num">2</span>
-    <span class="step-title">Key &amp; Tempo</span>
+    <span class="step-title">Root note &amp; Tempo</span>
 </div>""", unsafe_allow_html=True)
 
 col_key, col_tempo = st.columns(2)
 with col_key:
     key_input = st.selectbox(
-        "Key",
-        KEY_OPTIONS,
-        format_func=format_key,
+        "Root Note",
+        ["C", "G", "D", "A", "E", "B", "F#", "C#", "F", "Bb", "Eb", "Ab", "Db", "Gb",
+         "Am", "Em", "Dm", "Bm", "Gm", "Cm", "Fm", "C#m", "F#m", "G#m"],
     )
 with col_tempo:
     tempo_input = st.select_slider(
@@ -1489,7 +1435,6 @@ with col_struct:
         "Song Structures",
         list(SONG_STRUCTURES.keys()),
     )
-    structure_preview = st.empty()   # filled in below, once the sections are known
 with col_creative:
     creativity_level = st.select_slider(
         "Creativity Level",
@@ -1497,10 +1442,12 @@ with col_creative:
         value=2,
         format_func=lambda x: CREATIVITY_PRESETS[x]["label"],
     )
-    st.markdown(
-        f'<div class="creativity-desc">{CREATIVITY_PRESETS[creativity_level]["desc"]}</div>',
-        unsafe_allow_html=True,
-    )
+
+st.markdown(f"""<div class="creativity-labels">
+    <span class="creativity-lbl {'active' if creativity_level == 1 else ''}">Conventional</span>
+    <span class="creativity-lbl {'active' if creativity_level == 2 else ''}">Balanced</span>
+    <span class="creativity-lbl {'active' if creativity_level == 3 else ''}">Experimental</span>
+</div>""", unsafe_allow_html=True)
 
 if structure_choice == "Custom":
     all_sections = ["Intro", "Verse", "Pre-Chorus", "Chorus", "Bridge", "Outro"]
@@ -1512,8 +1459,6 @@ if structure_choice == "Custom":
     song_structure = selected_sections
 else:
     song_structure = SONG_STRUCTURES[structure_choice]
-
-structure_preview.markdown(render_structure_preview(song_structure), unsafe_allow_html=True)
 
 # ── Generate Button ───────────────────────────
 st.markdown('<div style="height:1.25rem"></div>', unsafe_allow_html=True)
@@ -1575,7 +1520,7 @@ if generate_clicked:
     st.session_state.midi_path   = midi_file
     st.session_state.last_config = {
         "mood":       MOOD_LABELS.get(mood_input, mood_input),
-        "key":        format_key(key_input),
+        "key":        key_input,
         "tempo":      TEMPO_LABELS_DISPLAY.get(tempo_input, tempo_input),
         "tempo_raw":  tempo_input,
         "structure":  structure_choice,
@@ -1599,7 +1544,7 @@ if st.session_state.song_data:
         <span class="config-val">{cfg["mood"]}</span>
     </div>
     <div class="config-item">
-        <span class="config-key">Key</span>
+        <span class="config-key">Root Note</span>
         <span class="config-val">{cfg["key"]}</span>
     </div>
     <div class="config-item">
