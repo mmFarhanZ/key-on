@@ -1,0 +1,15 @@
+# The app's custom CSS is designed for a light background,
+# so the theme is locked to light to avoid unreadable text in dark mode.
+[theme]
+base = "light"
+primaryColor = "#4A7CF7"
+backgroundColor = "#F7F6F3"
+secondaryBackgroundColor = "#EFF0EC"
+textColor = "#1C1B18"
+font = "sans serif"
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false
