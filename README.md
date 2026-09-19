@@ -113,7 +113,7 @@ which stays the same no matter which key you pick. The downloaded file is named
 ```
 .
 ├── appV2.py                        # Streamlit app (entry point)
-├── vocab_final_terbaru.pkl         # Vocabulary and token mappings
+├── chord_vocab.pkl         # Vocabulary and token mappings
 ├── chord_transformer_decoder_V3.pt # Trained model checkpoint
 ├── requirements.txt                # Python dependencies
 ├── .streamlit/

@@ -71,7 +71,7 @@ class ChordTransformerLSTMHybrid(nn.Module):
 # ==========================================
 @st.cache_resource
 def load_assets():
-    with open("vocab_final_terbaru.pkl", "rb") as f:
+    with open("chord_vocab.pkl", "rb") as f:
         vd = pickle.load(f)
 
     DEVICE = torch.device("cpu")
