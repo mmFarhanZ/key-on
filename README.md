@@ -135,7 +135,7 @@ pip install -r requirements.txt
 streamlit run appV2.py
 ```
 
-The app opens at http://localhost:8501. The `.pkl` and `.pt` files must sit in the
+The `.pkl` and `.pt` files must sit in the
 same folder as `appV2.py`.
 
 ## Troubleshooting
